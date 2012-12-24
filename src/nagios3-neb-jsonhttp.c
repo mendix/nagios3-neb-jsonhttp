@@ -17,7 +17,7 @@
 #include "nagios3-dev/nebstructs.h"
 #include "nagios3-dev/broker.h"
 
-/*Nagios meuk*/
+/*Nagios header files*/
 #include "nagios3-dev/config.h"
 #include "nagios3-dev/common.h"
 #include "nagios3-dev/nagios.h"
