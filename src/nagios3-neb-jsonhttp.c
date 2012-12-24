@@ -42,8 +42,21 @@ static char *argument;
 
 int nebmodule_init(int flags, char *args, nebmodule *handle)
 {
-	// For now hardcoded
-	argument = "http://localhost:8080";
+	if(args != NULL) {
+		if(strlen(args) <= 2000)
+		{
+			char text[4096];
+			argument = args;
+			snprintf(text, 4096, "I will use %s to send information.", args);
+			write_to_log(text, NSLOG_INFO_MESSAGE, NULL);
+		} else {
+			argument = "http://localhost";
+			write_to_log("Argument is too long, falling back to http://localhost to send information.", NSLOG_INFO_MESSAGE, NULL);
+		}
+	} else {
+		argument = "http://localhost";
+		write_to_log("No argument passed, falling back to http://localhost to send information.", NSLOG_INFO_MESSAGE, NULL);
+	}
 
 	neb_register_callback(NEBCALLBACK_NOTIFICATION_DATA, handle, 0, callbackHandler);
 	neb_register_callback(NEBCALLBACK_SERVICE_CHECK_DATA, handle, 0, callbackHandler);
