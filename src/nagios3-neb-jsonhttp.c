@@ -1,10 +1,10 @@
 /*
- * 
+ *
  * Copyright (c) 2012, Mendix bv
  * All Rights Reserved.
- * 
+ *
  * http://www.mendix.com/
- * 
+ *
  */
 
 #ifndef NSCORE
@@ -144,8 +144,8 @@ int handleNotificationData(nebstruct_notification_data *data)
 
 	CURL *curl;
 	CURLcode res;
- 
-	curl = curl_easy_init();     
+
+	curl = curl_easy_init();
 	if(curl)
 	{
 		curl_easy_setopt(curl, CURLOPT_URL, argument);
@@ -217,10 +217,10 @@ int handleServiceCheckData(nebstruct_service_check_data *data)
 		CURL *curl;
 		CURLcode res;
 
-		curl = curl_easy_init();     
+		curl = curl_easy_init();
 		if(curl)
 		{
-			
+
 			curl_easy_setopt(curl, CURLOPT_URL, argument);
 			curl_easy_setopt(curl, CURLOPT_POST, 1L);
 			struct curl_slist *slist = curl_slist_append(NULL, "Content-Type: application/json");
@@ -285,7 +285,7 @@ int handleHostCheckData(nebstruct_host_check_data *data)
 		CURL *curl;
 		CURLcode res;
 
-		curl = curl_easy_init();     
+		curl = curl_easy_init();
 		if(curl)
 		{
 			curl_easy_setopt(curl, CURLOPT_URL, argument);
@@ -329,7 +329,7 @@ int handleFlappingData(nebstruct_flapping_data *data)
 	CURL *curl;
 	CURLcode res;
 
-	curl = curl_easy_init();     
+	curl = curl_easy_init();
 	if(curl)
 	{
 		curl_easy_setopt(curl, CURLOPT_URL, argument);
@@ -373,7 +373,7 @@ int handleStateChangeData(nebstruct_statechange_data *data)
 	CURL *curl;
 	CURLcode res;
 
-	curl = curl_easy_init();     
+	curl = curl_easy_init();
 	if(curl)
 	{
 		curl_easy_setopt(curl, CURLOPT_URL, argument);
