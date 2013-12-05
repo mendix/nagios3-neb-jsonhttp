@@ -70,6 +70,12 @@ int nebmodule_init(int flags, char *args, nebmodule *handle)
 
 int nebmodule_deinit(int flags, int reason)
 {
+    neb_deregister_callback(NEBCALLBACK_NOTIFICATION_DATA, callbackHandler);
+    neb_deregister_callback(NEBCALLBACK_SERVICE_CHECK_DATA, callbackHandler);
+    neb_deregister_callback(NEBCALLBACK_HOST_CHECK_DATA, callbackHandler);
+    neb_deregister_callback(NEBCALLBACK_FLAPPING_DATA, callbackHandler);
+    neb_deregister_callback(NEBCALLBACK_STATE_CHANGE_DATA, callbackHandler);
+
     return 0;
 }
 
