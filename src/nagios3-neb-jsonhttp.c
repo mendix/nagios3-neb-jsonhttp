@@ -48,6 +48,7 @@ int nebmodule_init(int flags, char *args, nebmodule *handle)
             char text[4096];
             argument = args;
             snprintf(text, 4096, "I will use %s to send information.", args);
+            text[sizeof(text)-1]='\0';
             write_to_log(text, NSLOG_INFO_MESSAGE, NULL);
         } else {
             argument = "http://localhost";
