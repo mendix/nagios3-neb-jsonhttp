@@ -152,6 +152,8 @@ int handleNotificationData(nebstruct_notification_data *data)
     CURL *curl;
     CURLcode res;
 
+    curl_global_init(CURL_GLOBAL_NOTHING);
+
     curl = curl_easy_init();
     if(curl)
     {
@@ -224,6 +226,8 @@ int handleServiceCheckData(nebstruct_service_check_data *data)
         CURL *curl;
         CURLcode res;
 
+        curl_global_init(CURL_GLOBAL_NOTHING);
+
         curl = curl_easy_init();
         if(curl)
         {
@@ -292,6 +296,8 @@ int handleHostCheckData(nebstruct_host_check_data *data)
         CURL *curl;
         CURLcode res;
 
+        curl_global_init(CURL_GLOBAL_NOTHING);
+
         curl = curl_easy_init();
         if(curl)
         {
@@ -336,6 +342,8 @@ int handleFlappingData(nebstruct_flapping_data *data)
     CURL *curl;
     CURLcode res;
 
+    curl_global_init(CURL_GLOBAL_NOTHING);
+
     curl = curl_easy_init();
     if(curl)
     {
@@ -379,6 +387,8 @@ int handleStateChangeData(nebstruct_statechange_data *data)
 
     CURL *curl;
     CURLcode res;
+
+    curl_global_init(CURL_GLOBAL_NOTHING);
 
     curl = curl_easy_init();
     if(curl)
