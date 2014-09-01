@@ -29,6 +29,10 @@
 //JSON
 #include "json/json.h"
 
+#include <string.h>
+
+#define BUFFER_SIZE 2000
+
 NEB_API_VERSION(CURRENT_NEB_API_VERSION);
 
 static int callbackHandler(int callback_type, void *data);
@@ -38,32 +42,86 @@ int handleHostCheckData( nebstruct_host_check_data *data );
 int handleFlappingData( nebstruct_flapping_data *data );
 int handleStateChangeData( nebstruct_statechange_data *data );
 
-static char *callback_url;
+static char callback_url[BUFFER_SIZE];
+static int enable_notification_data = 1;
+static int enable_service_check_data = 1;
+static int enable_host_check_data = 1;
+static int enable_flapping_data = 1;
+static int enable_state_change_data = 1;
 
-int nebmodule_init(int flags, char *args, nebmodule *handle)
+void parse_arguments(char *args)
 {
+    snprintf(callback_url, BUFFER_SIZE, "http://localhost");
     if(args != NULL) {
-        if(strlen(args) <= 2000)
-        {
+        int argc = strlen(args);
+        if(argc <= BUFFER_SIZE) {
             char text[4096];
-            callback_url = args;
-            snprintf(text, 4096, "I will use %s to send information.", args);
-            text[sizeof(text)-1]='\0';
+            int i;
+            for(i = 0; i < argc; i++) {
+                if (args[i] == '-') {
+                    i++;
+                    switch(args[i]){
+                        case 'n':
+                            enable_notification_data = 0;
+                            break;
+                        case 's':
+                            enable_service_check_data = 0;
+                            break;
+                        case 'h':
+                            enable_host_check_data = 0;
+                            break;
+                        case 'f':
+                            enable_flapping_data = 0;
+                            break;
+                        case 'c':
+                            enable_state_change_data = 0;
+                            break;
+                        default:
+                            snprintf(text, 4096, "Ignored unknown flag: %c", args[i]);
+                            write_to_log(text, NSLOG_INFO_MESSAGE, NULL);
+                            break;
+                    }
+                } else if (args[i] == ' ') {
+                    // goooood...
+                } else {
+                    strncpy(callback_url, args + i, BUFFER_SIZE);
+                    callback_url[argc - i + 1] = '\0';
+                    break;
+                }
+            }
+            snprintf(text, 4096, "I will use %s to send information.", callback_url);
             write_to_log(text, NSLOG_INFO_MESSAGE, NULL);
         } else {
-            callback_url = "http://localhost";
             write_to_log("Argument is too long, falling back to http://localhost to send information.", NSLOG_INFO_MESSAGE, NULL);
         }
     } else {
-        callback_url = "http://localhost";
         write_to_log("No callback_url passed, falling back to http://localhost to send information.", NSLOG_INFO_MESSAGE, NULL);
     }
+}
 
-    neb_register_callback(NEBCALLBACK_NOTIFICATION_DATA, handle, 0, callbackHandler);
-    neb_register_callback(NEBCALLBACK_SERVICE_CHECK_DATA, handle, 0, callbackHandler);
-    neb_register_callback(NEBCALLBACK_HOST_CHECK_DATA, handle, 0, callbackHandler);
-    neb_register_callback(NEBCALLBACK_FLAPPING_DATA, handle, 0, callbackHandler);
-    neb_register_callback(NEBCALLBACK_STATE_CHANGE_DATA, handle, 0, callbackHandler);
+int nebmodule_init(int flags, char *args, nebmodule *handle)
+{
+    parse_arguments(args);
+    if (enable_notification_data == 1) {
+        neb_register_callback(NEBCALLBACK_NOTIFICATION_DATA, handle, 0, callbackHandler);
+        write_to_log("Registered notification data handler", NSLOG_INFO_MESSAGE, NULL);
+    }
+    if (enable_service_check_data == 1) {
+        neb_register_callback(NEBCALLBACK_SERVICE_CHECK_DATA, handle, 0, callbackHandler);
+        write_to_log("Registered service check data handler", NSLOG_INFO_MESSAGE, NULL);
+    }
+    if (enable_host_check_data == 1) {
+        neb_register_callback(NEBCALLBACK_HOST_CHECK_DATA, handle, 0, callbackHandler);
+        write_to_log("Registered host check data handler", NSLOG_INFO_MESSAGE, NULL);
+    }
+    if (enable_flapping_data == 1) {
+        neb_register_callback(NEBCALLBACK_FLAPPING_DATA, handle, 0, callbackHandler);
+        write_to_log("Registered flapping data handler", NSLOG_INFO_MESSAGE, NULL);
+    }
+    if (enable_state_change_data == 1) {
+        neb_register_callback(NEBCALLBACK_STATE_CHANGE_DATA, handle, 0, callbackHandler);
+        write_to_log("Registered state change data handler", NSLOG_INFO_MESSAGE, NULL);
+    }
 
     return 0;
 }
