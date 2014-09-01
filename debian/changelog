@@ -1,3 +1,9 @@
+nagios3-neb-jsonhttp (0.1.4-1) unstable; urgency=medium
+
+  * add gbp config
+
+ -- Xiwen Cheng <xiwen.cheng@mendix.com>  Mon, 01 Sep 2014 15:10:36 +0200
+
 nagios3-neb-jsonhttp (0.1.1-1) unstable; urgency=low
 
   * Add Debian changelog to package
