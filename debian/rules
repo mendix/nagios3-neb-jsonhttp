@@ -1,0 +1,40 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+export DH_VERBOSE=1
+
+DESTDIR=$(CURDIR)/debian/nagios3-neb-jsonhttp
+
+clean:
+	dh_testdir
+	dh_testroot
+	dh_clean
+
+# No architecture-dependent files to build.
+binary-arch:
+
+# Build architecture-independent files here.
+# binary-indep:
+	dh_clean
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs
+	dh_installdocs
+	dh_installexamples
+	dh_installman
+	dh_installdirs
+	dh_install
+	mkdir -p $(DESTDIR)/usr/lib/nagios3/
+	gcc -shared src/nagios3-neb-jsonhttp.c -fPIC -lcurl -ljson -o $(DESTDIR)/usr/lib/nagios3/nagios3-neb-jsonhttp.so
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary build

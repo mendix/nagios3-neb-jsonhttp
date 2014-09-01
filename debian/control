@@ -1,0 +1,16 @@
+Source: nagios3-neb-jsonhttp
+Section: misc
+Priority: extra
+Maintainer: Frank Baalbergen <frank.baalbergen@mendix.com>
+Build-Depends: debhelper (>= 7.0.50~), libjson0-dev (>= 0.9-1), libcurl4-gnutls-dev (>= 7.26.0-1), nagios3-dev (>= 3.4.1)
+Standards-Version: 3.8.4
+Homepage: https://www.mendix.com
+
+Package: nagios3-neb-jsonhttp
+Architecture: any
+Depends: nagios3, ${shlibs:Depends}, ${misc:Depends}
+Description: nagios3-neb-jsonhttp sends nagios3 callback routines in json format over http.
+ The nagios3-neb-jsonhttp library can be used from nagios3.
+ .
+ There are 31 call-back types defined in nagios3 which a NEB can register. This package sends 
+ notifications in json format via a http request. 
