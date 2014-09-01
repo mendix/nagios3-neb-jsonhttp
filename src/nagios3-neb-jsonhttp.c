@@ -38,7 +38,7 @@ int handleHostCheckData( nebstruct_host_check_data *data );
 int handleFlappingData( nebstruct_flapping_data *data );
 int handleStateChangeData( nebstruct_statechange_data *data );
 
-static char *argument;
+static char *callback_url;
 
 int nebmodule_init(int flags, char *args, nebmodule *handle)
 {
@@ -46,17 +46,17 @@ int nebmodule_init(int flags, char *args, nebmodule *handle)
         if(strlen(args) <= 2000)
         {
             char text[4096];
-            argument = args;
+            callback_url = args;
             snprintf(text, 4096, "I will use %s to send information.", args);
             text[sizeof(text)-1]='\0';
             write_to_log(text, NSLOG_INFO_MESSAGE, NULL);
         } else {
-            argument = "http://localhost";
+            callback_url = "http://localhost";
             write_to_log("Argument is too long, falling back to http://localhost to send information.", NSLOG_INFO_MESSAGE, NULL);
         }
     } else {
-        argument = "http://localhost";
-        write_to_log("No argument passed, falling back to http://localhost to send information.", NSLOG_INFO_MESSAGE, NULL);
+        callback_url = "http://localhost";
+        write_to_log("No callback_url passed, falling back to http://localhost to send information.", NSLOG_INFO_MESSAGE, NULL);
     }
 
     neb_register_callback(NEBCALLBACK_NOTIFICATION_DATA, handle, 0, callbackHandler);
@@ -157,7 +157,7 @@ int handleNotificationData(nebstruct_notification_data *data)
     curl = curl_easy_init();
     if(curl)
     {
-        curl_easy_setopt(curl, CURLOPT_URL, argument);
+        curl_easy_setopt(curl, CURLOPT_URL, callback_url);
         curl_easy_setopt(curl, CURLOPT_POST, 1L);
         struct curl_slist *slist = curl_slist_append(NULL, "Content-Type: application/json");
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, slist);
@@ -232,7 +232,7 @@ int handleServiceCheckData(nebstruct_service_check_data *data)
         if(curl)
         {
 
-            curl_easy_setopt(curl, CURLOPT_URL, argument);
+            curl_easy_setopt(curl, CURLOPT_URL, callback_url);
             curl_easy_setopt(curl, CURLOPT_POST, 1L);
             struct curl_slist *slist = curl_slist_append(NULL, "Content-Type: application/json");
             curl_easy_setopt(curl, CURLOPT_HTTPHEADER, slist);
@@ -301,7 +301,7 @@ int handleHostCheckData(nebstruct_host_check_data *data)
         curl = curl_easy_init();
         if(curl)
         {
-            curl_easy_setopt(curl, CURLOPT_URL, argument);
+            curl_easy_setopt(curl, CURLOPT_URL, callback_url);
             curl_easy_setopt(curl, CURLOPT_POST, 1L);
             struct curl_slist *slist = curl_slist_append(NULL, "Content-Type: application/json");
             curl_easy_setopt(curl, CURLOPT_HTTPHEADER, slist);
@@ -347,7 +347,7 @@ int handleFlappingData(nebstruct_flapping_data *data)
     curl = curl_easy_init();
     if(curl)
     {
-        curl_easy_setopt(curl, CURLOPT_URL, argument);
+        curl_easy_setopt(curl, CURLOPT_URL, callback_url);
         curl_easy_setopt(curl, CURLOPT_POST, 1L);
         struct curl_slist *slist = curl_slist_append(NULL, "Content-Type: application/json");
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, slist);
@@ -393,7 +393,7 @@ int handleStateChangeData(nebstruct_statechange_data *data)
     curl = curl_easy_init();
     if(curl)
     {
-        curl_easy_setopt(curl, CURLOPT_URL, argument);
+        curl_easy_setopt(curl, CURLOPT_URL, callback_url);
         curl_easy_setopt(curl, CURLOPT_POST, 1L);
         struct curl_slist *slist = curl_slist_append(NULL, "Content-Type: application/json");
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, slist);
