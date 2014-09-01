@@ -1,3 +1,10 @@
+nagios3-neb-jsonhttp (0.2.0-1) unstable; urgency=medium
+
+  * refactor: better variable name for callback url
+  * flags to turn off handlers
+
+ -- Xiwen Cheng <xiwen.cheng@mendix.com>  Mon, 01 Sep 2014 16:02:57 +0200
+
 nagios3-neb-jsonhttp (0.1.4-1) unstable; urgency=medium
 
   * add gbp config
