@@ -128,11 +128,26 @@ int nebmodule_init(int flags, char *args, nebmodule *handle)
 
 int nebmodule_deinit(int flags, int reason)
 {
-    neb_deregister_callback(NEBCALLBACK_NOTIFICATION_DATA, callbackHandler);
-    neb_deregister_callback(NEBCALLBACK_SERVICE_CHECK_DATA, callbackHandler);
-    neb_deregister_callback(NEBCALLBACK_HOST_CHECK_DATA, callbackHandler);
-    neb_deregister_callback(NEBCALLBACK_FLAPPING_DATA, callbackHandler);
-    neb_deregister_callback(NEBCALLBACK_STATE_CHANGE_DATA, callbackHandler);
+    if (enable_notification_data == 1) {
+        neb_deregister_callback(NEBCALLBACK_NOTIFICATION_DATA, callbackHandler);
+        write_to_log("Deregistered notification data handler", NSLOG_INFO_MESSAGE, NULL);
+    }
+    if (enable_service_check_data == 1) {
+        neb_deregister_callback(NEBCALLBACK_SERVICE_CHECK_DATA, callbackHandler);
+        write_to_log("Deregistered service check data handler", NSLOG_INFO_MESSAGE, NULL);
+    }
+    if (enable_host_check_data == 1) {
+        neb_deregister_callback(NEBCALLBACK_HOST_CHECK_DATA, callbackHandler);
+        write_to_log("Deregistered host check data handler", NSLOG_INFO_MESSAGE, NULL);
+    }
+    if (enable_flapping_data == 1) {
+        neb_deregister_callback(NEBCALLBACK_FLAPPING_DATA, callbackHandler);
+        write_to_log("Deregistered flapping data handler", NSLOG_INFO_MESSAGE, NULL);
+    }
+    if (enable_state_change_data == 1) {
+        neb_deregister_callback(NEBCALLBACK_STATE_CHANGE_DATA, callbackHandler);
+        write_to_log("Deregistered state change data handler", NSLOG_INFO_MESSAGE, NULL);
+    }
 
     return 0;
 }
